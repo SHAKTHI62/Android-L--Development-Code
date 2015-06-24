@@ -7,10 +7,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -29,6 +34,11 @@ public class NavigationDrawerFragment extends Fragment {
 
     private View containerView;
 
+    private RecyclerView mRecyclerView;
+
+    private ViewAdapter adapter;
+
+
     public NavigationDrawerFragment() {
         // Required empty public constructor
     }
@@ -45,10 +55,43 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ArrayList<String> dataValue = new ArrayList<>();
+        dataValue.add("velan");
+        dataValue.add("velan");
+        dataValue.add("velan");
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        View mlayout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+         mRecyclerView = (RecyclerView) mlayout.findViewById(R.id.drawer_list);
+
+        adapter = new ViewAdapter(getActivity(), getData());
+        mRecyclerView.setAdapter(adapter);
+
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        return mlayout;
     }
 
+
+    public List<Information> getData() {
+        List<Information> data = new ArrayList<>();
+        int [] icon = {R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher};
+        String [] title = {"You", "Me", "Collect"};
+        for (int i=0; i<title.length && i<icon.length; i++) {
+
+            Information current = new Information();
+            current.mItemId = icon[i];
+            current.mTitle = title[i];
+            data.add(current);
+
+        }
+        return data;
+    }
 
     public void setUp(int fragementID, DrawerLayout drawerLayout, final Toolbar mToolbar) {
 
